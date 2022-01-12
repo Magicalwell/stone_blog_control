@@ -1,0 +1,67 @@
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+    Microsoft YaHei, Arial, sans-serif;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+#app {
+  height: 100%;
+}
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+textarea,
+p,
+blockquote,
+th,
+td {
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+}
+a:link {
+  text-decoration: none;
+}
+/*已经访问过的链接*/
+a:visited {
+  text-decoration: none;
+}
+/*鼠标划过(停留)的链接*/
+a:hover {
+  text-decoration: none;
+}
+/* 正在点击的链接*/
+a:active {
+  text-decoration: none;
+}
+@import "./transition.scss";
