@@ -1,5 +1,14 @@
 <template>
   <div class="daskplace">
+    <h3
+      style="
+        line-height: 1.5;
+        border-bottom: 2px solid rgb(0, 0, 0);
+        margin-bottom: 20px;
+      "
+    >
+      主控台
+    </h3>
     <el-row :gutter="20">
       <el-col :xs="12" :sm="12" :lg="6"
         ><div class="card-panel">
@@ -74,8 +83,17 @@
         :md="{ span: 24 }"
         :lg="{ span: 12 }"
         :xl="{ span: 12 }"
-        >日历</el-col
       >
+        <el-calendar class="calendar-container">
+          <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
+          <template slot="dateCell" slot-scope="{ data }">
+            <p :class="data.isSelected ? 'is-selected' : ''">
+              {{ data.day.split("-").slice(1).join("-") }}
+              {{ data.isSelected ? "✔️" : "" }}
+            </p>
+          </template>
+        </el-calendar>
+      </el-col>
       <el-col
         :xs="{ span: 24 }"
         :sm="{ span: 12 }"
@@ -133,9 +151,10 @@ export default {
 <style lang="scss" scoped>
 .daskplace {
   padding: 32px;
-  background-color: #f0f2f5;
+  // background-color: #f2f5f7;
 }
 .card-panel {
+  border: 1px solid #000;
   height: 108px;
   background-color: #fff;
   display: flex;
@@ -149,6 +168,18 @@ export default {
   }
   .card-panel-right {
     margin-right: 26px;
+  }
+}
+.is-selected {
+  color: #1989fa;
+}
+.calendar-container {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  ::v-deep tbody .el-calendar-table__row {
+    td {
+      border-color: #ccc;
+    }
   }
 }
 </style>

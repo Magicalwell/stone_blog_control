@@ -22,8 +22,20 @@
             >
             </el-option>
           </el-select>
+          <small
+            >没有想要的分类?
+            <span
+              style="text-decoration: underline; cursor: pointer"
+              @click="addDocClassify"
+              >去新增</span
+            >
+          </small>
         </el-form-item>
-        <el-form-item class="block doc-tags" label="文章分类：">
+        <el-form-item
+          class="block doc-tags"
+          label="文章分类："
+          style="margin-top: 20px"
+        >
           <el-collapse style="width: 500px; border-top-color: transparent">
             <el-collapse-item>
               <template slot="title">
@@ -117,6 +129,21 @@ export default {
         this.valueConfig.chooseTags.indexOf(tag),
         1
       );
+    },
+    addDocClassify() {
+      this.$prompt("请输入新增的类型", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputPattern: /^[\u4E00-\u9FA5A-Za-z0-9]{1,20}$/,
+        inputErrorMessage: "请输入文字/字母/数字！",
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "新增成功！",
+          });
+        })
+        .catch(() => {});
     },
   },
 };

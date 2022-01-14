@@ -3,21 +3,26 @@
     <slot name="switchbtn"></slot>
     <bread-Crumb></bread-Crumb>
     <div class="navbar-right">
-      <template> 777888 </template>
-      <el-dropdown class="user-zone">
-        <span class="el-dropdown-link">
-          下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
+      <template>
+        <div class="navbar-right-item"></div>
+        <div class="navbar-right-item"></div>
+        <div class="navbar-right-item"></div>
+        <div class="navbar-right-item"></div>
+      </template>
+      <el-dropdown class="user-zone navbar-right-item" trigger="click">
+        <div class="el-dropdown-link">
+          <el-avatar
+            shape="square"
+            size="large"
+            src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
+          ></el-avatar>
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </div>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-circle-plus-outline"
-            >螺蛳粉</el-dropdown-item
-          >
-          <el-dropdown-item icon="el-icon-check">双皮奶</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-circle-check"
-            >蚵仔煎</el-dropdown-item
-          >
+          <el-dropdown-item>个人中心</el-dropdown-item>
+          <el-dropdown-item>首页</el-dropdown-item>
+          <el-dropdown-item>联系作者</el-dropdown-item>
+          <el-dropdown-item divided>退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -44,7 +49,26 @@ export default {
   line-height: 50px;
 }
 .user-zone {
-  padding-right: 20px;
-  margin-left: 10px;
+  // padding-right: 20px;
+  display: inline-block;
+  margin-right: 20px;
+  height: 100%;
+  cursor: pointer;
+  .el-dropdown-link {
+    // line-height: 50px;
+    outline: none;
+    margin-top: 5px;
+    ::v-deep.el-icon-arrow-down {
+      font-size: 12px;
+    }
+  }
+}
+.navbar-right-item {
+  display: inline-block;
+  padding: 0 8px;
+  height: 100%;
+  font-size: 18px;
+  color: #5a5e66;
+  vertical-align: text-bottom;
 }
 </style>
