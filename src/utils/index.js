@@ -13,3 +13,6 @@ export function setMenuList(data) {
 export function formatRouter(val) {
   console.log(val);
 }
+export function removeToken() {
+  return localStorage.removeItem("stone");
+}

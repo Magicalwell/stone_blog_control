@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { login, getUserInfo } from "@/api/login.js";
-import { setToken, getToken } from "@/utils/index.js";
+import { setToken, getToken, removeToken } from "@/utils/index.js";
 import * as router from "../router/index.js";
 Vue.use(Vuex);
 const modulesFiles = require.context("./components", true, /\.js$/);
@@ -108,6 +108,16 @@ export default new Vuex.Store({
         // }
         // commit("SET_ROUTES", accessedRoutes);
         resolve(accessedRoutes);
+      });
+    },
+    resetToken({ commit }) {
+      return new Promise((resolve) => {
+        commit("SET_TOKEN", "");
+        commit("SET_OPLIST", []);
+        commit("SET_ROUTES", []);
+        commit("SET_NAVLIST", []);
+        removeToken();
+        resolve();
       });
     },
   },

@@ -25,6 +25,7 @@ router.beforeEach(async (to, from, next) => {
           router.addRoutes(accessRoutes);
           next({ ...to, replace: true });
         } catch (error) {
+          await store.dispatch("resetToken");
           next("/login");
           NProgress.done();
         }
