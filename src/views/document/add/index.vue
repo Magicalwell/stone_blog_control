@@ -1,15 +1,27 @@
 <template>
   <div class="add-doc">
-    <div class="doc-info-container">
-      <h3 style="line-height: 1.5; border-bottom: 2px solid #000">新增文章</h3>
-      <el-form :model="valueConfig">
-        <el-form-item label="文章标题：" class="block">
+    <el-form
+      :model="valueConfig"
+      ref="doc_form"
+      :rules="rules"
+      :hide-required-asterisk="true"
+    >
+      <div class="doc-info-container">
+        <h3 style="line-height: 1.5; border-bottom: 2px solid #000">
+          新增文章
+        </h3>
+
+        <el-form-item label="文章标题：" class="block" prop="articletTitle">
           <el-input
             v-model="valueConfig.articletTitle"
             placeholder="请输入文章标题"
           ></el-input>
         </el-form-item>
-        <el-form-item class="inline-block" label="文章分类：">
+        <el-form-item
+          class="inline-block"
+          label="文章分类："
+          prop="articletType"
+        >
           <el-select
             v-model="valueConfig.articletType"
             placeholder="请选择文章分类"
@@ -17,7 +29,7 @@
             allow-create
           >
             <el-option
-              v-for="item in selectOptions.articletTitle"
+              v-for="(item, index) in selectOptions.articletTitle"
               :key="item.id"
               :label="item.label"
               :value="item.id"
@@ -31,7 +43,7 @@
                 <i
                   class="el-icon-circle-close"
                   style="font-size: 14px; padding: 5px"
-                  @click.stop="test"
+                  @click.stop="delOptions(index, item)"
                 ></i>
               </span>
             </el-option>
@@ -97,11 +109,14 @@
             </el-collapse-item>
           </el-collapse>
         </el-form-item>
-      </el-form>
-    </div>
-    <mavon-editor v-model="valueConfig.articleValue"></mavon-editor>
+      </div>
+      <mavon-editor
+        v-model="valueConfig.articleValue"
+        class="markdown-container"
+      ></mavon-editor>
+    </el-form>
     <div class="footer-btn">
-      <el-button class="btn-items">创建文章</el-button>
+      <el-button class="btn-items" @click="submitDoc">创建文章</el-button>
       <el-button class="btn-items">返回</el-button>
     </div>
   </div>
@@ -115,6 +130,25 @@ export default {
       valueConfig: { articleValue: "", chooseTags: [] },
       inputValue: "",
       inputVisible: false,
+      rules: {
+        articletTitle: [
+          { required: true, message: "请输入文章标题！", trigger: "blur" },
+        ],
+        articletType: [
+          {
+            required: true,
+            message: "请选择文章类型！",
+            trigger: ["blur", "change"],
+          },
+        ],
+        articleValue: [
+          {
+            required: true,
+            message: "请选择文章类型！",
+            trigger: ["blur"],
+          },
+        ],
+      },
     };
   },
   computed: {
@@ -168,8 +202,32 @@ export default {
         })
         .catch(() => {});
     },
-    test() {
-      console.log(99382131);
+    delOptions(val, item) {
+      if (item.id === this.valueConfig.articletType)
+        return this.$message({ message: "不能删除当前选中项！" });
+      this.$store
+        .dispatch("delDocSelectOptions", val)
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功！",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            message: "基础类型不能删除哦！",
+          });
+        });
+      console.log(val);
+    },
+    submitDoc() {
+      this.$refs.doc_form.validate((val) => {
+        if (val) {
+          if (!this.valueConfig.articleValue)
+            return this.$message("请输入内容！");
+          console.log("ok");
+        }
+      });
     },
   },
 };
@@ -192,6 +250,10 @@ export default {
 }
 .add-doc {
   padding: 30px 45px 20px 50px;
+  .markdown-container {
+    width: 100%;
+    min-height: 400px;
+  }
 }
 .doc-info-container {
   margin-bottom: 30px;

@@ -29,22 +29,27 @@ export default new Vuex.Store({
         {
           label: "随笔",
           id: 1,
+          cantDel: true,
         },
         {
           label: "HTML",
           id: 2,
+          cantDel: true,
         },
         {
           label: "Javascript",
           id: 3,
+          cantDel: true,
         },
         {
           label: "CSS",
           id: 4,
+          cantDel: true,
         },
         {
           label: "Vue",
           id: 5,
+          cantDel: true,
         },
       ],
     },
@@ -67,6 +72,9 @@ export default new Vuex.Store({
         label: data,
         id: state.selectOptions.articletTitle.length + 1,
       });
+    },
+    DEL_DOC_SELECT_OPTIONS: (state, data) => {
+      state.selectOptions.articletTitle.splice(data, 1);
     },
   },
   actions: {
@@ -127,16 +135,26 @@ export default new Vuex.Store({
       });
     },
     addDocSelectOptions({ commit, state }, data) {
-      console.log(state.selectOptions.articletTitle);
+      // console.log(state.selectOptions.articletTitle);
       return new Promise((resolve, reject) => {
         if (
           !state.selectOptions.articletTitle.some((item) => item.label == data)
         ) {
-          console.log("add");
+          // console.log("add");
           commit("ADD_DOC_SELECT_OPTIONS", data);
           resolve();
         } else {
           reject();
+        }
+      });
+    },
+    delDocSelectOptions({ commit, state }, data) {
+      return new Promise((resolve, reject) => {
+        if (state.selectOptions.articletTitle[data].cantDel) {
+          reject();
+        } else {
+          commit("DEL_DOC_SELECT_OPTIONS", data);
+          resolve();
         }
       });
     },
