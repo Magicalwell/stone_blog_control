@@ -62,6 +62,12 @@ export default new Vuex.Store({
     SET_ROUTES: (state, data) => {
       state.routes = router.routes.concat(data);
     },
+    ADD_DOC_SELECT_OPTIONS: (state, data) => {
+      state.selectOptions.articletTitle.push({
+        label: data,
+        id: state.selectOptions.articletTitle.length + 1,
+      });
+    },
   },
   actions: {
     login({ commit }, userInfo) {
@@ -118,6 +124,20 @@ export default new Vuex.Store({
         commit("SET_NAVLIST", []);
         removeToken();
         resolve();
+      });
+    },
+    addDocSelectOptions({ commit, state }, data) {
+      console.log(state.selectOptions.articletTitle);
+      return new Promise((resolve, reject) => {
+        if (
+          !state.selectOptions.articletTitle.some((item) => item.label == data)
+        ) {
+          console.log("add");
+          commit("ADD_DOC_SELECT_OPTIONS", data);
+          resolve();
+        } else {
+          reject();
+        }
       });
     },
   },

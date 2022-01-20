@@ -304,7 +304,7 @@
           />
         </g>
       </g>
-      <foreignObject x="200" y="200" width="600" height="160">
+      <foreignObject x="200" y="220" width="600" height="160">
         <div class="error-text">哎呀页面找不到了</div>
       </foreignObject>
     </svg>
@@ -327,6 +327,9 @@ export default {};
     font-size: 30px;
     color: rgb(137, 148, 155);
     font-weight: 700;
+    text-rendering: optimizeLegibility;
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+      Microsoft YaHei, Arial, sans-serif;
   }
 }
 .me404 {

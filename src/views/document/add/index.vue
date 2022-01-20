@@ -13,13 +13,27 @@
           <el-select
             v-model="valueConfig.articletType"
             placeholder="请选择文章分类"
+            clearable
+            allow-create
           >
             <el-option
               v-for="item in selectOptions.articletTitle"
               :key="item.id"
               :label="item.label"
               :value="item.id"
+              class="articletType-select"
             >
+              <span>{{ item.label }}</span>
+              <span
+                style="float: right; height: 100%"
+                :class="{ active: valueConfig.articletType === item.id }"
+              >
+                <i
+                  class="el-icon-circle-close"
+                  style="font-size: 14px; padding: 5px"
+                  @click.stop="test"
+                ></i>
+              </span>
             </el-option>
           </el-select>
           <small
@@ -137,13 +151,25 @@ export default {
         inputPattern: /^[\u4E00-\u9FA5A-Za-z0-9]{1,20}$/,
         inputErrorMessage: "请输入文字/字母/数字！",
       })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "新增成功！",
-          });
+        .then((val) => {
+          this.$store
+            .dispatch("addDocSelectOptions", val.value)
+            .then(() => {
+              this.$message({
+                type: "success",
+                message: "新增成功！",
+              });
+            })
+            .catch(() => {
+              this.$message({
+                message: "请勿输入重复的类型！",
+              });
+            });
         })
         .catch(() => {});
+    },
+    test() {
+      console.log(99382131);
     },
   },
 };
@@ -172,6 +198,12 @@ export default {
 }
 .el-form-item {
   margin-bottom: 0px;
+}
+.articletType-select {
+  .active {
+    filter: grayscale(100%);
+    opacity: 0.5;
+  }
 }
 .doc-tags {
   ::v-deep.el-form-item__label {
