@@ -6,6 +6,72 @@
         <label for class="search-label">文章id：</label>
         <el-input placeholder="id"></el-input>
       </div>
+      <div class="inline-block">
+        <label for class="search-label">文章标题：</label>
+        <el-input placeholder="请输入文章标题"></el-input>
+      </div>
+      <div class="inline-block">
+        <label for class="search-label">作者：</label>
+        <el-input placeholder="请输入作者"></el-input>
+      </div>
+      <div class="inline-block">
+        <label for class="search-label">文章类型：</label>
+        <el-select
+          v-model="searchOptions.searchType"
+          placeholder="请选择文章类型："
+        >
+          <el-option
+            v-for="item in selectOptions.articletTitle"
+            :key="item.id"
+            :label="item.label"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <div class="inline-block">
+        <label for class="search-label">文章标签：</label>
+        <el-input placeholder="请输入文章标签"></el-input>
+      </div>
+      <div style="margin-bottom: 20px">
+        <div class="inline-block">
+          <label for class="search-label">创建时间：</label>
+          <el-date-picker
+            v-model="selectOptions.time"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right"
+          >
+          </el-date-picker>
+        </div>
+        <div class="inline-block">
+          <label for class="search-label">修改时间：</label>
+          <el-date-picker
+            v-model="selectOptions.edittime"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right"
+          >
+          </el-date-picker>
+        </div>
+      </div>
+      <div class="search-btn">
+        <el-button-group>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            style="width: 100px"
+          ></el-button>
+          <el-button type="primary" icon="el-icon-refresh-right"></el-button>
+        </el-button-group>
+        <el-button type="primary" style="margin-left: 10px"> 新增 </el-button>
+      </div>
     </div>
     <div class="doc-list">
       <el-table :data="tableData" style="width: 100%" stripe max-height="850">
@@ -39,6 +105,7 @@
         :page-size="20"
         layout="total, sizes, prev, pager, next, jumper"
         :total="400"
+        style="text-align: right"
       >
       </el-pagination>
     </div>
@@ -46,6 +113,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -96,11 +164,46 @@ export default {
         },
       ],
       currentpage: 1,
+      searchOptions: {},
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ],
+      },
     };
   },
   methods: {
     handleSizeChange() {},
     handleCurrentChange() {},
+  },
+  computed: {
+    ...mapState(["selectOptions"]),
   },
 };
 </script>
@@ -115,6 +218,7 @@ export default {
   line-height: 40px;
   padding: 0 8px 0 0;
   box-sizing: border-box;
+  min-width: 80px;
 }
 .inline-block {
   margin: 30px 50px 0 0;
@@ -139,5 +243,10 @@ export default {
 }
 .doc-list {
   margin: 30px 0;
+}
+.search-btn {
+  align-items: center;
+  justify-content: flex-end;
+  display: flex;
 }
 </style>
