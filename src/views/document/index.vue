@@ -37,7 +37,7 @@
         <div class="inline-block">
           <label for class="search-label">创建时间：</label>
           <el-date-picker
-            v-model="selectOptions.time"
+            v-model="searchOptions.time"
             type="datetimerange"
             :picker-options="pickerOptions"
             range-separator="至"
@@ -50,7 +50,7 @@
         <div class="inline-block">
           <label for class="search-label">修改时间：</label>
           <el-date-picker
-            v-model="selectOptions.edittime"
+            v-model="searchOptions.edittime"
             type="datetimerange"
             :picker-options="pickerOptions"
             range-separator="至"
