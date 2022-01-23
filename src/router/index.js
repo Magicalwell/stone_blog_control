@@ -112,6 +112,54 @@ export const asyncRoutes = [
       },
     ],
   },
+  {
+    path: "/configuration",
+    name: "configuration",
+    component: layout,
+    redirect: "/configuration/userconfig",
+    meta: { title: "配置", icon: "el-icon-document" },
+    children: [
+      {
+        path: "/configuration/userconfig",
+        name: "userconfig",
+        component: () => import("@/views/config/userconfig/userconfig.vue"),
+        meta: { title: "个人中心", canDelete: true },
+      },
+    ],
+  },
+  {
+    path: "/components",
+    name: "components",
+    component: layout,
+    redirect: "/components/drag",
+    meta: { title: "组件", icon: "el-icon-document" },
+    children: [
+      {
+        path: "/components/drag",
+        name: "drag",
+        component: () => import("@/views/components/drag/drag.vue"),
+        meta: { title: "自由拖拽", canDelete: true },
+      },
+      {
+        path: "/components/timeline",
+        name: "timeline",
+        component: () => import("@/views/components/timeline/timeline.vue"),
+        meta: { title: "自定义时间线", canDelete: true },
+      },
+      {
+        path: "/components/todolist",
+        name: "todolist",
+        component: () => import("@/views/components/todolist/todolist.vue"),
+        meta: { title: "待办清单", canDelete: true },
+      },
+      {
+        path: "/components/workwave",
+        name: "workwave",
+        component: () => import("@/views/components/workwave/workwave.vue"),
+        meta: { title: "待办清单", canDelete: true },
+      },
+    ],
+  },
   { path: "*", redirect: "/404", hidden: true },
 ];
 

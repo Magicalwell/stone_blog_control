@@ -56,18 +56,29 @@
     </div>
     <div class="doc-list">
       <el-table :data="tableData" style="width: 100%" stripe max-height="850">
+        <el-table-column type="expand">
+          <template slot-scope="scope">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="留言内容">
+                <span>{{ scope.row.text }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
         <el-table-column type="index" label="序号" width="70">
         </el-table-column>
         <el-table-column prop="id" label="id" width="100"> </el-table-column>
-        <el-table-column prop="title" label="昵称" width="120">
+        <el-table-column prop="nickname" label="昵称" width="120">
         </el-table-column>
-        <el-table-column prop="createTime" label="账号" width="120">
+        <el-table-column prop="account" label="账号" width="120">
         </el-table-column>
-        <el-table-column prop="editTime" label="留言内容"> </el-table-column>
-        <el-table-column prop="author" label="留言时间" width="200">
+        <el-table-column prop="text" label="留言内容"> </el-table-column>
+        <el-table-column prop="creattime" label="留言时间" width="200">
         </el-table-column>
-        <!-- <el-table-column prop="docType" label="文章类型" width="100">
-        </el-table-column> -->
+        <el-table-column prop="agree" label="点赞数量" width="120">
+        </el-table-column>
+        <el-table-column prop="oppose" label="反对数量" width="120">
+        </el-table-column>
         <el-table-column fixed="right" label="操作" width="120">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small"
@@ -98,7 +109,44 @@
 export default {
   data() {
     return {
-      tableData: [],
+      tableData: [
+        {
+          id: 1,
+          nickname: "ddddwqeq",
+          account: "812081428",
+          text: "这波theshy来了全杀了",
+          creattime: "2022-1-23",
+          agree: 150,
+          oppose: 0,
+        },
+        {
+          id: 1,
+          nickname: "ddddwqeq",
+          account: "812081428",
+          text: "这波theshy来了全杀了",
+          creattime: "2022-1-23",
+          agree: 150,
+          oppose: 0,
+        },
+        {
+          id: 1,
+          nickname: "ddddwqeq",
+          account: "812081428",
+          text: "这波theshy来了全杀了",
+          creattime: "2022-1-23",
+          agree: 150,
+          oppose: 0,
+        },
+        {
+          id: 1,
+          nickname: "ddddwqeq",
+          account: "812081428",
+          text: "这波theshy来了全杀了",
+          creattime: "2022-1-23",
+          agree: 150,
+          oppose: 0,
+        },
+      ],
       currentpage: 1,
       searchOptions: {},
       pickerOptions: {
@@ -155,6 +203,7 @@ export default {
 }
 .messageboard-container {
   padding: 30px 45px 20px 50px;
+  margin-bottom: 20px;
 }
 .inline-block {
   margin: 30px 50px 0 0;
@@ -173,6 +222,9 @@ export default {
   ::v-deep.el-form-item__content {
     display: inline-block;
   }
+}
+.doc-list {
+  margin-bottom: 30px;
 }
 .search-btn {
   margin: 20px 0;
