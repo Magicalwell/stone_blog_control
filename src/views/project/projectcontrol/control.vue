@@ -22,7 +22,14 @@
         </el-table-column>
         <el-table-column prop="id" label="项目id" width="100">
         </el-table-column>
-        <el-table-column prop="title" label="项目标题"> </el-table-column>
+        <el-table-column prop="title" label="项目标题">
+          <template slot-scope="scope">
+            {{ scope.row.title }}
+            <span class="tags" v-if="cacheStack.includes(scope.row.id)">
+              编辑中
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column prop="globelimg" label="缩略图" width="150">
         </el-table-column>
         <el-table-column prop="author" label="作者" width="200">
@@ -51,16 +58,51 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-drawer :title="openproject.title" :visible.sync="drawer" size="65%">
+    <el-drawer
+      :title="openproject.title"
+      :visible.sync="drawer"
+      size="55%"
+      :before-close="confirmCloseDrawer"
+      class="drawer-box"
+    >
       <div class="drawer-container">
-        <el-input></el-input>
-        <el-input
-          type="textarea"
-          :rows="2"
-          placeholder="请输入内容"
-          v-model="openproject.introduction"
-        >
-        </el-input>
+        <el-form :model="openproject">
+          <el-form-item label="项目名称：" style="width: 202px">
+            <el-input></el-input>
+          </el-form-item>
+          <el-form-item label="项目作者：" style="width: 202px">
+            <el-input></el-input>
+          </el-form-item>
+          <el-form-item label="项目标签：" style="width: 202px">
+            <el-input></el-input>
+          </el-form-item>
+          <el-form-item label="项目更新时间：" style="width: 202px">
+            <el-input></el-input>
+          </el-form-item>
+          <el-form-item label="项目地址：" style="width: 404px">
+            {{ "http:\/\/127.0.0.1" }}
+            <el-input></el-input>
+          </el-form-item>
+          <el-form-item label="项目简介：">
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="请输入内容"
+              v-model="openproject.introduction"
+            >
+            </el-input>
+          </el-form-item>
+          <mavon-editor
+            v-model="openproject.text"
+            class="markdown-container"
+            :subfield="false"
+          ></mavon-editor>
+        </el-form>
+      </div>
+      <div class="drawer-footer">
+        <el-button>放弃更改</el-button>
+        <el-button @click="drawer = false">暂存</el-button>
+        <el-button type="primary">提交</el-button>
       </div>
     </el-drawer>
   </div>
@@ -77,6 +119,7 @@ export default {
           author: "三石",
           tags: ["vue", "后台管理"],
           introduction: "哦哦哦哦这是测试哦\n哦哦哦哦",
+          text: "这是111111111111111111",
         },
         {
           id: 2,
@@ -84,24 +127,32 @@ export default {
           author: "三石",
           tags: ["vue", "后台管理"],
           introduction: "哈哈哈哈哈哈哈哈哈",
+          text: "这是正文",
         },
       ],
       drawer: false,
       innerDrawer: false,
       editor: true,
       openproject: {},
+      projectStack: [],
+      cacheStack: [], // 保存有修改的id
+      currentId: null,
     };
   },
   methods: {
     handleClick(item, Type) {
-      if (item.id !== this.openproject.id) {
+      this.currentId = item.id;
+      if (this.cacheStack.includes(item.id)) {
+        this.openproject = this.projectStack.filter(
+          (val) => val.id == item.id
+        )[0];
+      } else {
+        this.cacheStack.push(item.id);
         this.openproject = this.deepCopy(item);
+        this.projectStack.push(this.openproject);
       }
       this.editor = Type;
       this.drawer = true;
-    },
-    formatTags(row, column, cellValue, index) {
-      console.log(row, column, cellValue, index);
     },
     deepCopy(obj) {
       // 深拷贝
@@ -115,6 +166,39 @@ export default {
       }
       return newObj;
     },
+    confirmCloseDrawer(done) {
+      this.$confirm("确认不保存直接关闭吗?", "提示", {
+        confirmButtonText: "放弃更改",
+        cancelButtonText: "去提交",
+        type: "warning",
+      })
+        .then(() => {
+          this.cacheStack = [];
+          this.openproject = {};
+          this.currentId = null;
+          this.projectStack = [];
+          // this.cacheStack.splice(this.cacheStack.indexOf(this.currentId), 1);
+          // this.openproject.splice();
+          // 暂时做全部清空处理，待引入组件库
+          done();
+        })
+        .catch(() => {});
+    },
+  },
+  beforeRouteLeave(to, from, next) {
+    if (to && this.cacheStack.length != 0) {
+      this.$confirm("有待保存的修改,确认直接退出吗?", "提示", {
+        confirmButtonText: "放弃更改",
+        cancelButtonText: "去提交",
+        type: "warning",
+      })
+        .then(() => {
+          next();
+        })
+        .catch(() => {}); // 后续需要跳转到其他路由时保存编辑状态，则需要存入vuex中
+    } else {
+      next();
+    }
   },
 };
 </script>
@@ -125,9 +209,9 @@ export default {
 }
 .tags {
   margin-right: 10px;
-  height: 24px;
+  height: 21px;
   padding: 0 8px;
-  line-height: 22px;
+  line-height: 21px;
   display: inline-block;
   font-size: 12px;
   color: #409eff;
@@ -142,5 +226,11 @@ export default {
   align-items: center;
   justify-content: flex-end;
   margin-bottom: 20px;
+}
+.drawer-box {
+  .drawer-footer {
+    padding-left: 20px;
+    padding-bottom: 20px;
+  }
 }
 </style>
