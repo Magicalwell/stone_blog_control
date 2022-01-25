@@ -117,6 +117,12 @@ export const asyncRoutes = [
         component: () => import("@/views/power/powerPage/page.vue"),
         meta: { title: "页面权限", canDelete: true },
       },
+      {
+        path: "/power/powerrouter",
+        name: "powerrouter",
+        component: () => import("@/views/power/powerRouter/router.vue"),
+        meta: { title: "路由权限", canDelete: true },
+      },
     ],
   },
   {

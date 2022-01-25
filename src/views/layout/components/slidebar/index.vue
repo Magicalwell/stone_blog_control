@@ -18,8 +18,8 @@
           <el-menu-item index="/home">
             <span slot="title">主控台</span>
           </el-menu-item>
-          <el-menu-item index="/workplace">
-            <span slot="title">工作台</span>
+          <el-menu-item index="/globelicon">
+            <span slot="title">全局功能视图</span>
           </el-menu-item>
         </el-submenu>
         <template v-for="group in menuList">

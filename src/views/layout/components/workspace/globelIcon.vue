@@ -22,10 +22,7 @@
         :key="item.i"
         class="card-item"
       >
-        <router-link
-          :to="item.path"
-          style="display: inline-block; width: 100%; height: 100%"
-        >
+        <router-link :to="item.path" class="inner-router">
           {{ item.i }}
         </router-link>
         <i class="el-icon-rank drag-btn"></i>
@@ -53,9 +50,9 @@ export default {
       console.log(index);
       return {
         x: (index % 6) * 2,
-        y: 2 * parseInt(index / 6),
+        y: 3 * parseInt(index / 6),
         w: 2,
-        h: 2,
+        h: 3,
         i: item.meta.title,
         path: item.path,
       };
@@ -101,8 +98,9 @@ export default {
 .card-item {
   position: relative;
   border: 1px solid #ebeef5;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 14px;
+  overflow: hidden;
 }
 .drag-btn {
   position: absolute;
@@ -115,5 +113,13 @@ export default {
   align-items: center;
   justify-content: center;
   background-color: #ebeef5;
+}
+.inner-router {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
 }
 </style>
