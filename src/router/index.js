@@ -29,6 +29,13 @@ export const routes = [
         component: Home,
         meta: { title: "主控台", fixed: true, canDelete: false },
       },
+      {
+        path: "/globelicon",
+        name: "globelicon",
+        component: () =>
+          import("@/views/layout/components/workspace/globelIcon.vue"),
+        meta: { title: "全局功能视图", fixed: true, canDelete: false },
+      },
     ],
   },
   { path: "/404", component: () => import("@/views/errorPage/error404.vue") },
