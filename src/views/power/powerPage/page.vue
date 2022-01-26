@@ -1,5 +1,7 @@
 <template>
-  <div class="power-page">这里设置每个路由对应的页面需要哪些op</div>
+  <div class="power-page">
+    这里进行角色的控制，新增和编辑，以及对应路由、op的授权
+  </div>
 </template>
 
 <script>
