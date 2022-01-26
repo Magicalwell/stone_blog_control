@@ -7,6 +7,7 @@
       ref="scrollContainer"
     >
       <router-link
+        v-show="item.meta.showTag"
         v-for="(item, index) in visitedViews"
         :to="item.path"
         :key="index"

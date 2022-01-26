@@ -65,4 +65,24 @@ a:hover {
 a:active {
   text-decoration: none;
 }
+::-webkit-scrollbar {
+  background-color: #e4e4e4;
+  border-radius: 10px;
+}
+//滚动条的滑块
+::-webkit-scrollbar-thumb {
+  background-color: #a1a3a9;
+  border-radius: 10px;
+}
+.search-label {
+  text-align: right;
+  vertical-align: middle;
+  float: left;
+  font-size: 14px;
+  color: #606266;
+  line-height: 40px;
+  padding: 0 8px 0 0;
+  box-sizing: border-box;
+  min-width: 80px;
+}
 @import "./transition.scss";

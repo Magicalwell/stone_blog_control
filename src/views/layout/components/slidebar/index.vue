@@ -70,8 +70,7 @@ export default {
   computed: {
     ...mapGetters(["menuList"]),
     activeMenu() {
-      console.log(this.$route);
-      return this.$route.path;
+      return this.$route.path.replace(/\/details$/, "");
     },
   },
 };

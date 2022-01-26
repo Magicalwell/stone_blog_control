@@ -9,6 +9,69 @@
     >
       角色权限
     </h3>
+    <div class="doc-searchOption">
+      <div class="inline-block">
+        <label for class="search-label">id：</label>
+        <el-input placeholder="id" v-model="searchOptions.id"></el-input>
+      </div>
+      <div class="inline-block">
+        <label for class="search-label">手机号：</label>
+        <el-input
+          placeholder="请输入用户手机号"
+          v-model="searchOptions.nickname"
+        ></el-input>
+      </div>
+      <div class="inline-block">
+        <label for class="search-label">使用人姓名：</label>
+        <el-input
+          placeholder="请输入使用人姓名"
+          v-model="searchOptions.account"
+        ></el-input>
+      </div>
+      <div>
+        <div class="inline-block">
+          <label for class="search-label">注册ip：</label>
+          <el-input
+            placeholder="支持模糊搜索哦"
+            v-model="searchOptions.text"
+          ></el-input>
+        </div>
+        <div class="inline-block">
+          <label for class="search-label">最后修改人：</label>
+          <el-input
+            placeholder="支持模糊搜索哦"
+            v-model="searchOptions.text"
+          ></el-input>
+        </div>
+        <div class="inline-block">
+          <label for class="search-label">角色：</label>
+          <el-input
+            placeholder="支持模糊搜索哦"
+            v-model="searchOptions.text"
+          ></el-input>
+        </div>
+        <div class="inline-block">
+          <label for class="search-label">状态：</label>
+          <el-input
+            placeholder="支持模糊搜索哦"
+            v-model="searchOptions.text"
+          ></el-input>
+        </div>
+        <div class="inline-block">
+          <label for class="search-label">留言时间：</label>
+          <el-date-picker
+            v-model="searchOptions.time"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right"
+          >
+          </el-date-picker>
+        </div>
+      </div>
+    </div>
     <div class="control-btn">
       <el-button-group>
         <el-button type="primary" icon="el-icon-search"></el-button>
@@ -18,54 +81,197 @@
     </div>
     <div class="container">
       <el-table :data="tableData" style="width: 100%" stripe max-height="850">
+        <!-- 序号 手机号 使用人姓名 使用人部门 最后修改人 修改时间 状态 -->
         <el-table-column type="index" label="序号" width="70">
         </el-table-column>
         <el-table-column prop="id" label="账号id" width="100">
         </el-table-column>
-        <el-table-column prop="account" label="账户"> </el-table-column>
-        <el-table-column prop="globelimg" label="缩略图" width="150">
+        <el-table-column prop="phone" label="手机号" width="150">
         </el-table-column>
-        <el-table-column prop="author" label="作者" width="200">
+        <el-table-column prop="nickname" label="使用人姓名" width="150">
         </el-table-column>
-        <el-table-column prop="tags" label="项目标签" width="350">
+        <el-table-column prop="registerip" label="注册ip" width="200">
+        </el-table-column>
+        <el-table-column prop="lastmodefined" label="最后修改人" width="250">
+        </el-table-column>
+        <el-table-column prop="changetime" label="修改时间" width="250">
+        </el-table-column>
+        <el-table-column prop="status" label="状态" width="100">
+        </el-table-column>
+        <el-table-column prop="roles" label="角色" width="300">
           <template slot-scope="scope">
             <span
-              v-for="(item, index) in scope.row.tags"
+              v-for="(item, index) in scope.row.roles"
               :key="index"
-              class="tags"
+              class="roles-item"
+              @click="showRoleControl(item)"
             >
-              {{ item }}
+              {{ item.rolesname }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="120">
+        <el-table-column fixed="right" label="操作" width="200">
+          <!-- <template slot-scope="scope"> -->
           <template slot-scope="scope">
             <el-button
-              @click="handleClick(scope.row, true)"
               type="text"
               size="small"
+              @click="rolesDetails('details', scope.row)"
               >查看</el-button
             >
-            <el-button type="text" size="small">编辑</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="rolesDetails('edit', scope.row)"
+              >编辑</el-button
+            >
+            <el-button type="text" size="small">控制</el-button>
+            <el-button type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+    <change-Role
+      :showControl.sync="dialogVisible"
+      :roleData="roleData"
+    ></change-Role>
   </div>
 </template>
 
 <script>
+import changeRole from "./components/changerole.vue";
 export default {
   data() {
     return {
-      tableData: [],
+      openRoleId: null,
+      dialogVisible: false,
+      tableData: [
+        {
+          id: 1,
+          phone: 17712121212,
+          nickname: "三石啊",
+          registerip: "127.0.0.1",
+          lastmodefined: "三石啊",
+          changetime: "2022-2-26",
+          status: 0,
+          roles: [{ id: 1, rolesname: "超级管理员" }],
+        },
+        {
+          id: 2,
+          phone: 17712121212,
+          nickname: "三石啊2222",
+          registerip: "127.0.0.222",
+          lastmodefined: "三石啊",
+          changetime: "2022-2-26",
+          status: 0,
+          roles: [{ id: 2, rolesname: "默认角色" }],
+        },
+      ],
+      searchOptions: {},
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ],
+      },
+      roleData: {},
     };
+  },
+  methods: {
+    showRoleControl(item) {
+      this.roleData = item;
+      this.openRoleId = item.id;
+      this.dialogVisible = true;
+    },
+    rolesDetails(type, data) {
+      const {
+        id,
+        phone,
+        nickname,
+        status,
+        roles,
+        registerip,
+        lastmodefined,
+        changetime,
+      } = data;
+      this.$router.push({
+        path: "/power/powerrole/details",
+        query: {
+          type,
+          id,
+          phone,
+          nickname,
+          status,
+          roles,
+          registerip,
+          lastmodefined,
+          changetime,
+        },
+      });
+    },
+  },
+  components: {
+    changeRole,
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.inline-block {
+  margin: 30px 50px 0 0;
+  display: inline-block;
+  ::v-deep.el-input {
+    display: inline-block;
+    width: 202px;
+  }
+  // ::v-deep.el-form-item__content {
+  //   display: inline-block;
+  //   width: 202px;
+  // }
+}
+.block {
+  margin: 30px 50px 0 0;
+  ::v-deep.el-form-item__content {
+    display: inline-block;
+  }
+}
+.control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 20px 0;
+}
 .power-role {
-  padding: 30px 45px 20px 50px;
+  padding: 30px 45px 30px 50px;
+}
+.roles-item {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #409eff;
 }
 </style>

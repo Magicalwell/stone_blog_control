@@ -1,5 +1,5 @@
 <template>
-  <div class="power-page">nnnnmmmm</div>
+  <div class="power-page">这里设置每个路由对应的页面需要哪些op</div>
 </template>
 
 <script>

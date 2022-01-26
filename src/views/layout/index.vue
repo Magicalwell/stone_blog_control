@@ -16,7 +16,7 @@
       </div>
       <app-Main></app-Main>
     </div>
-    <div class="fill-screen" v-if="show == 1"></div>
+    <!-- <div class="fill-screen" v-if="show == 1"></div> -->
   </div>
 </template>
 
