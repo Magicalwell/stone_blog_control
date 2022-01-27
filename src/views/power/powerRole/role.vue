@@ -134,6 +134,7 @@
     <change-Role
       :showControl.sync="dialogVisible"
       :roleData="roleData"
+      :rolesId="openRoleId"
     ></change-Role>
   </div>
 </template>
@@ -206,7 +207,7 @@ export default {
     showRoleControl(item) {
       this.roleData = item;
       this.openRoleId = item.id;
-      this.dialogVisible = true;
+      this.dialogVisible = !this.dialogVisible;
     },
     rolesDetails(type, data) {
       const {

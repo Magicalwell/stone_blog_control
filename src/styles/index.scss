@@ -85,4 +85,25 @@ a:active {
   box-sizing: border-box;
   min-width: 80px;
 }
+.page-container {
+  padding: 30px 45px 30px 50px;
+  .inline-block {
+    margin: 30px 50px 0 0;
+    display: inline-block;
+    .el-input {
+      display: inline-block;
+      width: 202px;
+    }
+    // ::v-deep.el-form-item__content {
+    //   display: inline-block;
+    //   width: 202px;
+    // }
+  }
+  .block {
+    margin: 30px 50px 0 0;
+    .el-form-item__content {
+      display: inline-block;
+    }
+  }
+}
 @import "./transition.scss";
