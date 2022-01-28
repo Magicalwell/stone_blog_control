@@ -31,6 +31,16 @@
           </template>
         </el-table-column>
         <el-table-column prop="globelimg" label="缩略图" width="150">
+          <template>
+            <el-image
+              style="width: 80px; height: 80px"
+              src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/de2750e86df74c539ecb5be17dbd9b6c~tplv-k3u1fbpfcp-no-mark:720:720:720:480.awebp?"
+              :preview-src-list="[
+                'https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/de2750e86df74c539ecb5be17dbd9b6c~tplv-k3u1fbpfcp-no-mark:720:720:720:480.awebp?',
+              ]"
+            >
+            </el-image>
+          </template>
         </el-table-column>
         <el-table-column prop="author" label="作者" width="200">
         </el-table-column>

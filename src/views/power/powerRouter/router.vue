@@ -11,8 +11,8 @@
     </h3>
     这里设置路由，包括新增，路径的设置以及路由中一些方法对应的op
     <div class="router-select-container" style="margin-bottom: 20px">
-      <div class="inline-block" style="margin-right: 20px">
-        <label for class="search-label">手机号：</label>
+      <div class="inline-block">
+        <label for class="search-label">选择项目：</label>
         <el-select v-model="selectOptions" placeholder="请选择">
           <el-option
             v-for="item in options"
@@ -67,7 +67,7 @@
               :key="index"
               class="tags"
             >
-              {{ item }}
+              {{ item.power }}
             </span>
           </template>
         </el-table-column>
@@ -75,15 +75,104 @@
           <!-- <template slot-scope="scope" v-if="scope.row.children">
             <el-button type="text" size="small">查看</el-button>
           </template> -->
-          <template>
-            <el-button type="text" size="small">编辑</el-button>
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              size="small"
+              @click="editRouter(scope.row, 'edit')"
+              >编辑</el-button
+            >
             <el-button type="text" size="small">删除</el-button>
-            <el-button type="text" size="small">新增子路由</el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="editRouter(scope.row, 'add')"
+              >新增子路由</el-button
+            >
             <!-- <el-button type="text" size="small">查看</el-button> -->
           </template>
         </el-table-column>
       </el-table>
     </div>
+    <el-dialog
+      :title="poptype == 'edit' ? '编辑菜单' : '新增菜单'"
+      :visible.sync="dialogVisible"
+      width="50%"
+      top="5vh"
+    >
+      <el-form :model="editRouterData">
+        <el-form-item label="路径path：" class="inline-block">
+          <el-input v-model="editRouterData.path"></el-input>
+        </el-form-item>
+        <el-form-item label="路由name：" class="inline-block">
+          <el-input v-model="editRouterData.name"></el-input>
+        </el-form-item>
+        <el-form-item label="菜单名称：" class="inline-block">
+          <el-input v-model="editRouterData.meta.title"></el-input>
+        </el-form-item>
+        <el-form-item label="菜单图标：" class="inline-block">
+          <span :class="editRouterData.meta.icon"></span>
+          <el-input v-model="editRouterData.meta.icon"></el-input>
+        </el-form-item>
+        <el-form-item label="重定向：" class="inline-block">
+          <el-input v-model="editRouterData.redirect"></el-input>
+        </el-form-item>
+        <el-form-item label="显示Tags标签" prop="delivery">
+          <el-switch v-model="editRouterData.meta.showTag"></el-switch>
+        </el-form-item>
+        <el-form-item label="可删除Tags" prop="delivery">
+          <el-switch v-model="editRouterData.meta.canDelete"></el-switch>
+        </el-form-item>
+        <el-form-item label="页面权限" prop="delivery">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="addOpList"
+            v-if="editRouterData.oplist"
+            >新增功能权限</el-button
+          >
+          <el-table
+            :data="editRouterData.oplist"
+            height="250"
+            border
+            style="width: 100%"
+          >
+            <el-table-column type="index" width="50" label="序号">
+            </el-table-column>
+            <el-table-column prop="power" label="权限">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.power"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" label="权限名称">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.name"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="edituser" label="修改人"> </el-table-column>
+            <el-table-column prop="edittime" label="修改时间">
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="deleOplist(scope.$index)"
+                  >删 除</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- <el-switch v-model="editRouterData.oplist"></el-switch> -->
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -91,7 +180,11 @@
 export default {
   data() {
     return {
-      selectOptions: null,
+      routerId: null,
+      poptype: "edit",
+      editRouterData: { meta: {} },
+      dialogVisible: false,
+      selectOptions: 1,
       options: [
         { systemId: 1, title: "博客后台管理系统" },
         { systemId: 2, title: "微前端导航" },
@@ -107,7 +200,38 @@ export default {
               path: "/document/manageDoc",
               name: "manage",
               meta: { title: "管理文档", canDelete: true, showTag: true },
-              oplist: ["searchlist", "sumbit", "sumbit", "sumbit", "sumbit"],
+              oplist: [
+                {
+                  power: "searchlist",
+                  name: "搜索列表",
+                  edituser: "超级管理员",
+                  edittime: "2022-1-28",
+                },
+                {
+                  power: "submit",
+                  name: "提交表单",
+                  edituser: "超级管理员",
+                  edittime: "2022-1-28",
+                },
+                {
+                  power: "submit",
+                  name: "提交表单",
+                  edituser: "超级管理员",
+                  edittime: "2022-1-28",
+                },
+                {
+                  power: "submit",
+                  name: "提交表单",
+                  edituser: "超级管理员",
+                  edittime: "2022-1-28",
+                },
+                {
+                  power: "submit",
+                  name: "提交表单",
+                  edituser: "超级管理员",
+                  edittime: "2022-1-28",
+                },
+              ],
             },
             {
               path: "/document/addDoc",
@@ -221,7 +345,33 @@ export default {
   },
   methods: {
     sonoftree({ row }) {
-      return row.children ? "" : "son-of-tree";
+      return row.children ? "" : "son-of-tree"; // 给子树加类名
+    },
+    editRouter(item, type) {
+      this.dialogVisible = !this.dialogVisible;
+      if (type == "edit") {
+        this.editRouterData = item;
+      } else {
+        this.editRouterData = { meta: {} };
+        console.log(item);
+      }
+    },
+    addOpList() {
+      let opt = {
+        power: "",
+        name: "",
+        edituser: "",
+        edittime: "",
+      };
+      if (this.editRouterData.oplist) {
+        this.editRouterData.oplist.unshift(opt);
+      } else {
+        // this.editRouterData.oplist = [{ opt }];
+        this.$set(this.editRouterData, "oplist", [{ opt }]);
+      }
+    },
+    deleOplist(item) {
+      this.editRouterData.oplist.splice(item, 1);
     },
   },
 };
@@ -236,6 +386,7 @@ export default {
 }
 .inline-block {
   display: inline-block;
+  margin-right: 20px;
 }
 .tags {
   margin-right: 10px;
@@ -247,5 +398,9 @@ export default {
   color: #409eff;
   border: 1px solid #d9ecff;
   border-radius: 4px;
+}
+.oplist-item {
+  width: 202px;
+  margin: 10px 20px 0 0;
 }
 </style>

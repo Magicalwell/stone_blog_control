@@ -51,7 +51,6 @@
           ></el-button>
           <el-button type="primary" icon="el-icon-refresh-right"></el-button>
         </el-button-group>
-        <el-button type="primary" style="margin-left: 10px"> 新增 </el-button>
       </div>
     </div>
     <div class="doc-list">

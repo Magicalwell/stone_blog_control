@@ -86,6 +86,12 @@
         </el-table-column>
         <el-table-column prop="docType" label="文章类型" width="100">
         </el-table-column>
+        <el-table-column prop="docMsg" label="留言数量" width="100">
+        </el-table-column>
+        <el-table-column prop="docAgree" label="点赞数量" width="100">
+        </el-table-column>
+        <el-table-column prop="docOppose" label="反对数量" width="100">
+        </el-table-column>
         <el-table-column fixed="right" label="操作" width="120">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small"
