@@ -84,6 +84,7 @@
             >
             <el-button type="text" size="small">删除</el-button>
             <el-button
+              v-if="scope.row.children"
               type="text"
               size="small"
               @click="editRouter(scope.row, 'add')"
@@ -128,7 +129,7 @@
             size="mini"
             type="primary"
             @click="addOpList"
-            v-if="editRouterData.oplist"
+            v-if="!editRouterData.children"
             >新增功能权限</el-button
           >
           <el-table
@@ -168,9 +169,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="addNewSubRouter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -183,6 +182,7 @@ export default {
       routerId: null,
       poptype: "edit",
       editRouterData: { meta: {} },
+      edutRouterFather: {},
       dialogVisible: false,
       selectOptions: 1,
       options: [
@@ -348,12 +348,14 @@ export default {
       return row.children ? "" : "son-of-tree"; // 给子树加类名
     },
     editRouter(item, type) {
+      this.poptype = type;
       this.dialogVisible = !this.dialogVisible;
-      if (type == "edit") {
+      if (this.poptype == "edit") {
         this.editRouterData = item;
       } else {
+        // 此处应该发送数据给后台，后台去添加。因为没做后台暂时前端模拟
         this.editRouterData = { meta: {} };
-        console.log(item);
+        this.edutRouterFather = item.path;
       }
     },
     addOpList() {
@@ -372,6 +374,21 @@ export default {
     },
     deleOplist(item) {
       this.editRouterData.oplist.splice(item, 1);
+    },
+    addNewSubRouter() {
+      this.dialogVisible = false;
+      if (this.poptype === "add") {
+        this.tableData.some((item) => {
+          if (this.edutRouterFather == item.path) {
+            if (item.children) {
+              item.children.push(this.editRouterData);
+            } else {
+              item.children = [this.editRouterData];
+            }
+            return;
+          }
+        });
+      }
     },
   },
 };

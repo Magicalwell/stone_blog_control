@@ -125,7 +125,9 @@
               @click="rolesDetails('edit', scope.row)"
               >编辑</el-button
             >
-            <el-button type="text" size="small">控制</el-button>
+            <el-button type="text" size="small" @click="checkStatus(scope.row)"
+              >控制</el-button
+            >
             <el-button type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -136,6 +138,29 @@
       :roleData="roleData"
       :rolesId="openRoleId"
     ></change-Role>
+    <el-dialog
+      title="账户状态控制"
+      :visible.sync="statusDialogVisible"
+      width="20%"
+      :close-on-click-modal="true"
+    >
+      <div>
+        <div style="margin-bottom: 20px">当前状态：{{ roleData.status }}</div>
+        <el-select v-model="newStatus" placeholder="请选择" style="width: 100%">
+          <el-option
+            v-for="item in $store.state.selectOptions.accountStatus"
+            :key="item.id"
+            :label="item.label"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="statusDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="changeStatus">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -146,6 +171,7 @@ export default {
     return {
       openRoleId: null,
       dialogVisible: false,
+      statusDialogVisible: false,
       tableData: [
         {
           id: 1,
@@ -201,6 +227,7 @@ export default {
         ],
       },
       roleData: {},
+      newStatus: null,
     };
   },
   methods: {
@@ -235,7 +262,20 @@ export default {
         },
       });
     },
+    checkStatus(item) {
+      this.roleData = item;
+      // this.openRoleId = item.id;
+      this.statusDialogVisible = !this.statusDialogVisible;
+    },
+    changeStatus() {
+      this.statusDialogVisible = false;
+      if (this.newStatus && this.newStatus != this.roleData.status) {
+        console.log("发送请求更改状态，返回成功则弹出窗口");
+        this.roleData.status = this.newStatus;
+      }
+    },
   },
+  computed: {},
   components: {
     changeRole,
   },

@@ -135,6 +135,13 @@ export default {
           lastedituser: "无",
           lastedittime: "2020-1-27",
         },
+        {
+          roleid: 2,
+          rolesname: "默认角色",
+          describe: "默认角色是什么我不用说了吧",
+          lastedituser: "无",
+          lastedittime: "2020-1-27",
+        },
       ],
       searchOptions: {},
       roleData: {},

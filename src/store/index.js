@@ -52,6 +52,20 @@ export default new Vuex.Store({
           cantDel: true,
         },
       ],
+      accountStatus: [
+        {
+          label: "在线",
+          id: 1,
+        },
+        {
+          label: "离线",
+          id: 2,
+        },
+        {
+          label: "禁用",
+          id: 3,
+        },
+      ],
     },
   },
   mutations: {
