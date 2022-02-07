@@ -7,7 +7,7 @@
         margin-bottom: 30px;
       "
     >
-      角色权限
+      账号管理
     </h3>
     <div class="doc-searchOption">
       <div class="inline-block">

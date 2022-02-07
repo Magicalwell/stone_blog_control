@@ -68,9 +68,11 @@
       </el-table>
     </div>
     <change-Role
+      ref="changerole"
       :showControl.sync="dialogVisible"
       :roleData="roleData"
       :rolesId="openRoleId"
+      @setRoles="updateRoles"
     ></change-Role>
     <el-dialog
       title="修改角色信息"
@@ -160,7 +162,7 @@ export default {
   methods: {
     showRoleControl(item) {
       this.roleData = item;
-      this.openRoleId = item.id;
+      this.openRoleId = item.roleid;
       this.dialogVisible = !this.dialogVisible;
     },
     edit(item) {
@@ -171,6 +173,9 @@ export default {
     link(item) {
       this.linkdialogVisible = !this.linkdialogVisible;
       console.log(item);
+    },
+    updateRoles(val) {
+      console.log(val);
     },
   },
   components: {

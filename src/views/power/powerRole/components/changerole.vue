@@ -10,6 +10,9 @@
         <div class="title" style="display: flex; margin-bottom: 20px">
           <p class="label">角色：</p>
           {{ roleData.rolesname }}
+          <small>
+            两种方法：1.两次获取，第一次获取全部的菜单，第二次获取选中的。2.一次获取，给菜单添加一个标记;组件内部只去请求所有的菜单数据，外面的点击只是用于传递id和数据，点击授权向父级发出一个时间，里面携带参数请求接口
+          </small>
         </div>
         <div
           class="roles-tree"
@@ -68,11 +71,16 @@ export default {
     roleData: {
       type: Object,
     },
+    checkNodes: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
       loading: false,
-      data: [
+      data: [],
+      tempdata: [
         {
           id: 1,
           label: "后台管理系统",
@@ -136,6 +144,20 @@ export default {
       console.log(this.$refs.optree.getCheckedKeys(true));
 
       this.dialogTableVisible = false;
+      this.$emit("setRoles", {
+        oplist: this.$refs.optree.getCheckedKeys(true),
+        menulist: [
+          ...this.$refs.routertree.getCheckedKeys(),
+          ...this.$refs.routertree.getHalfCheckedKeys(),
+        ],
+      });
+    },
+    getOpAndMenuList() {
+      this.loading = true;
+      setTimeout(() => {
+        this.data = this.tempdata;
+        this.loading = false;
+      }, 1500);
     },
   },
   watch: {
@@ -154,8 +176,11 @@ export default {
     },
     rolesId: {
       handler(val) {
+        console.log(val);
         if (val) {
           console.log(val);
+          this.data = [];
+          this.getOpAndMenuList();
         }
       },
     },
