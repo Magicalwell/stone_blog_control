@@ -1,204 +1,78 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import layout from "@/views/layout";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-Vue.use(VueRouter);
-const originalPush = VueRouter.prototype.push;
-VueRouter.prototype.push = function push(location, onResolve, onReject) {
-  if (onResolve || onReject)
-    return originalPush.call(this, location, onResolve, onReject);
-  return originalPush.call(this, location).catch((err) => err);
-};
-export const routes = [
-  {
-    path: "/login",
-    name: "login",
-    component: () => import("@/views/login/index"),
-  },
-  {
-    path: "/",
-    name: "layout",
-    redirect: "/home",
-    component: layout,
-    meta: { title: "首页" },
-    children: [
-      {
-        path: "/home",
-        name: "home",
-        component: Home,
-        meta: { title: "主控台", fixed: true, canDelete: false, showTag: true },
-      },
-      {
-        path: "/globelicon",
-        name: "globelicon",
-        component: () =>
-          import("@/views/layout/components/workspace/globelIcon.vue"),
-        meta: {
-          title: "全局功能视图",
-          fixed: true,
-          canDelete: false,
-          showTag: true,
-        },
-      },
-    ],
-  },
-  { path: "/404", component: () => import("@/views/errorPage/error404.vue") },
-];
-export const asyncRoutes = [
-  {
-    path: "/document",
-    name: "document",
-    component: layout,
-    redirect: "/document/manageDoc",
-    meta: { title: "文件管理", icon: "el-icon-folder" },
-    children: [
-      {
-        path: "/document/manageDoc",
-        name: "manage",
-        component: () => import("@/views/document/index.vue"),
-        meta: { title: "管理文档", canDelete: true, showTag: true },
-      },
-      {
-        path: "/document/addDoc",
-        name: "addDoc",
-        component: () => import("@/views/document/add/index.vue"),
-        meta: { title: "新增文档", canDelete: true, showTag: true },
-      },
-    ],
-  },
-  {
-    path: "/messageboard",
-    name: "messageboard",
-    component: layout,
-    redirect: "/messageboard/manageMsg",
-    meta: { title: "留言板", icon: "el-icon-document" },
-    children: [
-      {
-        path: "/messageboard/manageMsg",
-        name: "manageMsg",
-        component: () => import("@/views/messageboard/messageboard.vue"),
-        meta: { title: "留言板管理", canDelete: true, showTag: true },
-      },
-    ],
-  },
-  {
-    path: "/project",
-    name: "project",
-    component: layout,
-    redirect: "/project/projectshow",
-    meta: { title: "项目管理", icon: "el-icon-document" },
-    children: [
-      {
-        path: "/project/projectshow",
-        name: "projectshow",
-        component: () => import("@/views/project/showproject.vue"),
-        meta: { title: "项目展示", canDelete: true, showTag: true },
-      },
-      {
-        path: "/project/projectcontrol",
-        name: "projectcontrol",
-        component: () => import("@/views/project/projectcontrol/control.vue"),
-        meta: { title: "项目管理", canDelete: true, showTag: true },
-      },
-    ],
-  },
-  {
-    path: "/power",
-    name: "power",
-    component: layout,
-    redirect: "/power/powerrole",
-    meta: { title: "权限管理", icon: "el-icon-document" },
-    children: [
-      {
-        path: "/power/powerrole",
-        name: "powerrole",
-        component: () => import("@/views/power/powerRole/role.vue"),
-        meta: { title: "账号管理", canDelete: true, showTag: true },
-      },
-      {
-        path: "/power/powerrole/details",
-        name: "powerrole/details",
-        component: () =>
-          import("@/views/power/powerRole/components/details.vue"),
-        meta: { title: "权限详情", canDelete: true, showTag: false },
-      },
-      {
-        path: "/power/powerpage",
-        name: "powerpage",
-        component: () => import("@/views/power/powerPage/page.vue"),
-        meta: { title: "角色管理", canDelete: true, showTag: true },
-      },
-      {
-        path: "/power/powerrouter",
-        name: "powerrouter",
-        component: () => import("@/views/power/powerRouter/router.vue"),
-        meta: { title: "路由管理", canDelete: true, showTag: true },
-      },
-    ],
-  },
-  {
-    path: "/configuration",
-    name: "configuration",
-    component: layout,
-    redirect: "/configuration/userconfig",
-    meta: { title: "配置", icon: "el-icon-document" },
-    children: [
-      {
-        path: "/configuration/userconfig",
-        name: "userconfig",
-        component: () => import("@/views/config/userconfig/userconfig.vue"),
-        meta: { title: "个人中心", canDelete: true, showTag: true },
-      },
-    ],
-  },
-  {
-    path: "/components",
-    name: "components",
-    component: layout,
-    redirect: "/components/drag",
-    meta: { title: "组件", icon: "el-icon-document" },
-    children: [
-      {
-        path: "/components/drag",
-        name: "drag",
-        component: () => import("@/views/components/drag/drag.vue"),
-        meta: { title: "自由拖拽", canDelete: true, showTag: true },
-      },
-      {
-        path: "/components/timeline",
-        name: "timeline",
-        component: () => import("@/views/components/timeline/timeline.vue"),
-        meta: { title: "自定义时间线", canDelete: true, showTag: true },
-      },
-      {
-        path: "/components/todolist",
-        name: "todolist",
-        component: () => import("@/views/components/todolist/todolist.vue"),
-        meta: { title: "待办清单", canDelete: true, showTag: true },
-      },
-      {
-        path: "/components/workwave",
-        name: "workwave",
-        component: () => import("@/views/components/workwave/workwave.vue"),
-        meta: { title: "待办清单", canDelete: true, showTag: true },
-      },
-    ],
-  },
-  { path: "*", redirect: "/404", hidden: true },
-];
+// 进度条
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
-const createRouter = () =>
-  new VueRouter({
-    routes,
-  });
+import store from '@/store/index'
+import util from '@/libs/util.js'
 
-const router = createRouter();
+// 路由数据
+import routes from './routes'
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
-  const newRouter = createRouter();
-  router.matcher = newRouter.matcher; // reset router
+// fix vue-router NavigationDuplicated
+const VueRouterPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (location) {
+  return VueRouterPush.call(this, location).catch(err => err)
+}
+const VueRouterReplace = VueRouter.prototype.replace
+VueRouter.prototype.replace = function replace (location) {
+  return VueRouterReplace.call(this, location).catch(err => err)
 }
 
-export default router;
+Vue.use(VueRouter)
+
+// 导出路由 在 main.js 里使用
+const router = new VueRouter({
+  routes
+})
+
+/**
+ * 路由拦截
+ * 权限验证
+ */
+router.beforeEach(async (to, from, next) => {
+  // 确认已经加载多标签页数据 https://github.com/d2-projects/d2-admin/issues/201
+  await store.dispatch('d2admin/page/isLoaded')
+  // 确认已经加载组件尺寸设置 https://github.com/d2-projects/d2-admin/issues/198
+  await store.dispatch('d2admin/size/isLoaded')
+  // 进度条
+  NProgress.start()
+  // 关闭搜索面板
+  store.commit('d2admin/search/set', false)
+  // 验证当前路由所有的匹配中是否需要有登录验证的
+  if (to.matched.some(r => r.meta.auth)) {
+    // 这里暂时将cookie里是否存有token作为验证是否登录的条件
+    // 请根据自身业务需要修改
+    const token = util.cookies.get('token')
+    if (token && token !== 'undefined') {
+      next()
+    } else {
+      // 没有登录的时候跳转到登录界面
+      // 携带上登陆成功之后需要跳转的页面完整路径
+      next({
+        name: 'login',
+        query: {
+          redirect: to.fullPath
+        }
+      })
+      // https://github.com/d2-projects/d2-admin/issues/138
+      NProgress.done()
+    }
+  } else {
+    // 不需要身份校验 直接通过
+    next()
+  }
+})
+
+router.afterEach(to => {
+  // 进度条
+  NProgress.done()
+  // 多页控制 打开新的页面
+  store.dispatch('d2admin/page/open', to)
+  // 更改标题
+  util.title(to.meta.title)
+})
+
+export default router
